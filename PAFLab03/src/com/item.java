@@ -81,7 +81,7 @@ public class item {
 				return "Error while connecting to the database for reading.";
 			}
 			
-			// Prepare the html table to be displayed
+			// Prepare the HTML table to be displayed
 	
 			output = "<table border='1'><tr><th>Item Code</th>"
 			+"<th>Item Name</th><th>Item Price</th>"
@@ -101,24 +101,26 @@ public class item {
 				String itemPrice = Double.toString(rs.getDouble("itemPrice"));
 				String itemDesc = rs.getString("itemDesc");
 				
-				// Add a row into the html table
+				// Add a row into the HTML table
 				output += "<tr><td>" + itemCode + "</td>";
 				output += "<td>" + itemName + "</td>";
 				output += "<td>" + itemPrice + "</td>";output += "<td>" + itemDesc + "</td>";
 				
 				// buttons
-				output += "<td><input name='btnUpdate' "
-				+ " type='button' value='Update'></td>"
-				+ "<td><form method='post' action='items.jsp'>"
-				+ "<input name='btnRemove' "
-				+ " type='submit' value='Remove'>"
-				+ "<input name='itemID' type='hidden' "
-				+ " value='" + itemID + "'>" + "</form></td></tr>";
+				output += "<td>"
+							+ "<input name='btnUpdate' type='button' value='Update'>"
+						+ "</td>"
+						+ "<td>"
+							+ "<form method='post' action='items.jsp'>"
+								+ "<input name='btnRemove' type='submit' value='Remove'>"
+								+ "<input name='itemID' type='hidden' value='" + itemID + "'>" 
+							+ "</form>"
+						+ "</td></tr>";
 				
 			}
 			
 			con.close();
-			// Complete the html table
+			// Complete the HTML table
 			output += "</table>";
 		}
 		catch (Exception e){
@@ -130,6 +132,41 @@ public class item {
 		return output;
 	}
 	
+	public String deleteData(String itemId) {
+		
+		String output = "";
+		
+		try {
+			
+			Connection con = connect();
+			
+			if(con == null) {
+				
+				return "Error while connecting to Database";
+				
+			}
+			
+			//create prepared statement
+			String query = "delete from item where itemId = ? ";
+			
+			PreparedStatement preparedStmt  = con.prepareStatement(query);
+			
+			preparedStmt.setInt(1, Integer.valueOf(itemId));
+			
+			preparedStmt.execute();
+			con.close();
+			
+			output = "Item Deleted";
+			
+			
+		}catch(Exception e) {
+			output = "Error while Deleting";
+			System.err.println(e.getMessage());
+			
+		}
+		
+		return output;
+	}
 	
 	
 	

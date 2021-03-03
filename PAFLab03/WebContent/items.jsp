@@ -3,15 +3,25 @@
 pageEncoding="ISO-8859-1"%>
 
 <%
-	if (request.getParameter("itemCode") != null)
-		{
-			item itemObj = new item();
-			String stsMsg = itemObj.insertItem(request.getParameter("itemCode"),
-			request.getParameter("itemName"),
-			request.getParameter("itemPrice"),
-			request.getParameter("itemDesc"));
-			session.setAttribute("statusMsg", stsMsg);
-		}
+	if (request.getParameter("itemCode") != null){
+		
+		item itemObj = new item();
+		
+		String stsMsg = itemObj.insertItem(request.getParameter("itemCode"),
+		request.getParameter("itemName"),
+		request.getParameter("itemPrice"),
+		request.getParameter("itemDesc"));
+		session.setAttribute("statusMsg", stsMsg);
+	}
+
+	if(request.getParameter("itemID") != null){
+		
+		item itemObj = new item();		
+		String stsMsg = itemObj.deleteData(request.getParameter("itemID"));
+		session.setAttribute("StatusMsg", stsMsg);
+		
+	}
+
 %>
 
 <!DOCTYPE html>
