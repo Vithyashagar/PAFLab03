@@ -108,12 +108,18 @@ public class item {
 				
 				// buttons
 				output += "<td>"
-							+ "<input name='btnUpdate' type='button' value='Update'>"
-						+ "</td>"
+							+ "<form method='post' action='updateItem.jsp'>"
+								+ "<input name='btnUpdate' type='submit' value='Update'>"
+								+ "<input name='itemID' type='hidden' value=' " + itemID + "'>"
+								+ "<input name='itemCode' type='hidden' value=' " + itemCode + "'>"
+								+ "<input name='itemName' type='hidden' value=' " + itemName + "'>"
+								+ "<input name='itemPrice' type='hidden' value=' " + itemPrice + "'>"
+								+ "<input name='itemDesc' type='hidden' value=' " + itemDesc + "'>"
+							+ "</form></td>"
 						+ "<td>"
 							+ "<form method='post' action='items.jsp'>"
-								+ "<input name='btnRemove' type='submit' value='Remove'>"
-								+ "<input name='itemID' type='hidden' value='" + itemID + "'>" 
+								+ "<input name='btnRemove' type='submit' value='Delete' class='btn btn-danger'>"
+								+ "<input name='itemID' type='hidden' value='" + itemID + "'>"
 							+ "</form>"
 						+ "</td></tr>";
 				
@@ -168,6 +174,40 @@ public class item {
 		return output;
 	}
 	
+	public String updateItem(String itemCode, String itemName, String itemPrice, String itemDesc)  
+	{
+		String output = "";	
+		try {
+			
+			Connection con = connect();
+			
+			if (con == null)
+			{
+				return "Error while connecting to the database for reading.";
+			}			
+				String sql = "update items set itemName=?, itemPrice=?, itemDesc=?" + "where itemCode=" + itemCode;
+				
+				PreparedStatement preparedStmt = con.prepareStatement(sql);
+				
+				
+				preparedStmt.setString(1, itemName);
+				preparedStmt.setDouble(2, Double.parseDouble(itemPrice));
+				preparedStmt.setString(3, itemDesc);
+				
+			
+				preparedStmt.execute();
+				con.close();
+				
+				output = "Updated successfully";
+			
+		}catch(Exception e) {
+			output = "Error while updating";
+			System.err.println(e.getMessage());
+		}
+		return output;
+		
+		
+	}
 	
 	
 }
