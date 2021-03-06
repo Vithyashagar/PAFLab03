@@ -24,6 +24,19 @@ pageEncoding="ISO-8859-1"%>
 
 %>
 
+<%
+	if (request.getParameter("itemCodeUpdated") != null)
+	{
+		item itemObj = new item();
+		
+		String stsMsg = itemObj.updateItem(request.getParameter("itemName"),
+		request.getParameter("itemPrice"),
+		request.getParameter("itemDesc"),
+		request.getParameter("itemCodeUpdated"));
+		session.setAttribute("statusMsg", stsMsg);
+	}		
+%>
+
 <!DOCTYPE html>
 <html>
 	<head>

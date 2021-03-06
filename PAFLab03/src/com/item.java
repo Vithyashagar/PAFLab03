@@ -9,6 +9,9 @@ import java.sql.Statement;
 
 public class item {
 	
+	private static Statement stmt = null;
+	static int id = 0;
+	
 	public Connection connect(){
 		
 		Connection con = null;
@@ -52,7 +55,7 @@ public class item {
 			preparedStmt.setInt(1, 0);
 			preparedStmt.setString(2, code);
 			preparedStmt.setString(3, name);
-			preparedStmt.setString(4, price);
+			preparedStmt.setDouble(4, Double.parseDouble(price));
 			preparedStmt.setString(5, desc);
 			
 			//execute the statement
@@ -94,8 +97,8 @@ public class item {
 			
 			// iterate through the rows in the result set
 			while (rs.next()){
-				
-				String itemID = Integer.toString(rs.getInt("itemID"));
+		
+				String itemID = Integer.toString((rs.getInt("itemID")));
 				String itemCode = rs.getString("itemCode");
 				String itemName = rs.getString("itemName");
 				String itemPrice = Double.toString(rs.getDouble("itemPrice"));
@@ -174,31 +177,35 @@ public class item {
 		return output;
 	}
 	
-	public String updateItem(String itemCode, String itemName, String itemPrice, String itemDesc)  
+	public String updateItem( String itemName, String itemPrice, String itemDesc, String itemCode)  
 	{
 		String output = "";	
 		try {
-			
+						
 			Connection con = connect();
+		
 			
 			if (con == null)
 			{
 				return "Error while connecting to the database for reading.";
-			}			
-				String sql = "update items set itemName=?, itemPrice=?, itemDesc=?" + "where itemCode=" + itemCode;
-				
-				PreparedStatement preparedStmt = con.prepareStatement(sql);
-				
-				
-				preparedStmt.setString(1, itemName);
-				preparedStmt.setDouble(2, Double.parseDouble(itemPrice));
-				preparedStmt.setString(3, itemDesc);
-				
+			}
+
 			
-				preparedStmt.execute();
-				con.close();
-				
+			stmt = con.createStatement();
+						
+			String update="UPDATE test.item"
+					+ " SET itemName = '"+itemName+"', itemPrice = '"+itemPrice+"' , itemDesc = '"+itemDesc+"'"
+					+ " WHERE itemId = '"+itemCode+"'";
+			
+			int rsv = stmt.executeUpdate(update);
+			
+
+			if(rsv > 0) {
 				output = "Updated successfully";
+			}
+			con.close();
+			
+			
 			
 		}catch(Exception e) {
 			output = "Error while updating";

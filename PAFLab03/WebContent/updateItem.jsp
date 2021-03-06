@@ -3,24 +3,12 @@
 pageEncoding="ISO-8859-1"%>
 
 <%
+	String itemID = request.getParameter("itemID");
 	String itemCode = request.getParameter("itemCode");
 	String itemName = request.getParameter("itemName");
 	double itemPrice = Double.parseDouble(request.getParameter("itemPrice"));
 	String itemDesc = request.getParameter("itemDesc");
 
-%>
-
-<%
-	if (request.getParameter("itemID") != null)
-	{
-		item itemObj = new item();
-		
-		String stsMsg = itemObj.updateItem(request.getParameter("itemCode"),
-		request.getParameter("itemName"),
-		request.getParameter("itemPrice"),
-		request.getParameter("itemDesc"));
-		session.setAttribute("statusMsg", stsMsg);
-	}		
 %>
 
 <!DOCTYPE html>
@@ -33,10 +21,10 @@ pageEncoding="ISO-8859-1"%>
 		
 		<h1>Items Management</h1>
 		
-		<form method="post" action="updateItem.jsp">
+		<form method="post" action="items.jsp">
 		
-		
-			Item code: <input name="itemCode" type="text"   value = "<%= itemCode %>"><br>
+			<input name = itemID hidden value="<%=itemID%>">
+			Item code: <input name="itemCodeUpdated" type="text"   value = "<%= itemCode %>"><br>
 			Item name: <input name="itemName" type="text"   value = "<%= itemName %>" ><br> 
 			Item price: <input name="itemPrice" type="text" value = "<%= itemPrice %>"><br>
 		    Item description: <input name="itemDesc" type="text"  value = "<%= itemDesc %>" ><br> 
@@ -45,8 +33,7 @@ pageEncoding="ISO-8859-1"%>
 	    </form>
 		
 
-		
-		
+			
 		<%
 			out.print(session.getAttribute("statusMsg"));
 		%>
